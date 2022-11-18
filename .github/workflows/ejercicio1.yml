@@ -1,0 +1,29 @@
+# Nombre del workflow (aparecerá en la GUI) 
+name: Ejercicio-1
+# Cuándo se ejecuta: https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows
+on: [push, pull_request]
+# Listado de jobs
+jobs:
+  
+  ejercicio-1:
+    # Pasamos la imagen para la maquina
+    runs-on: ubuntu-latest
+    steps:
+      # Instalamos Go
+      - uses: actions/setup-go@v3
+        with:
+          go-version: 1.18
+      - run: go version
+      # Hacemos Checkout del código
+      - name: Checkout Code
+        uses: actions/checkout@v3
+      # Hacemos los tests
+      - name: Run unit tests
+          run: go test ./...
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          platforms: linux/amd64
+          push: false
+      
